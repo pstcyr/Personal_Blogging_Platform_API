@@ -5,7 +5,7 @@
   "description": "A RESTful API for a personal blogging platform, built with Node.js and Express.",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js",
+    "dev": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -20,6 +20,12 @@
   },
   "homepage": "https://github.com/pstcyr/Personal_Blogging_Platform_API#readme",
   "dependencies": {
-    "express": "^5.1.0"
+    "@prisma/client": "^6.8.2",
+    "express": "^5.1.0",
+    "pg": "^8.16.0",
+    "prisma": "^6.8.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
   }
 }
