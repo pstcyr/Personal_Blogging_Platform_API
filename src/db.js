@@ -1,6 +1,5 @@
-import exp from 'constants';
 import { DatabaseSync} from 'node:sqlite'
-const db = new DatabaseSync(':memory:');
+const db = new DatabaseSync('./mydatabase.sqlite');
 
 
 
@@ -10,7 +9,7 @@ db.exec(`
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         title TEXT NOT NULL,
         publishTime TEXT NOT NULL,
-        author TEXT,
+        tags TEXT,
         content TEXT NOT NULL
         )
     `)

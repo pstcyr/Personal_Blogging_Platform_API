@@ -1,0 +1,8 @@
+-- CreateTable
+CREATE TABLE "articles" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "title" TEXT NOT NULL,
+    "publishTime" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "tags" TEXT NOT NULL,
+    "content" TEXT NOT NULL
+);

@@ -1,23 +1,29 @@
 import express from 'express';
-import db from '../db.js';
+import prisma from '../prismaClient.js';
 
 
 // Create a new express router instance. Lets us define a group of routes separately from the main server file
 const router = express.Router();
 
-router.get('/', (req, res) => {
-    // Fetch all articles from the database
-    const fetchArticles = db.prepare('SELECT * FROM articles')
-    // Execute the prepared statement to get all articles
-    // .all() returns all rows as an array of objects
-    const articles = fetchArticles.all();
+router.get('/', async (req, res) => {
+    const fetchArticles = await prisma.articles.findMany();
+    
+    const parsedArticles = fetchArticles.map(article => ({
+        ...article,
+        tags: article.tags ? article.tags.split(',') : []
+    }))
+    try {
     // Send the articles as a JSON response
-    res.json(articles);
-    console.log('Im here')
+        res.json(fetchArticles);
+        console.log('Articles successfully retrieved');
+    } catch (error) {
+        console.error('Error fetching articles:', error);
+        res.status(500).json({ error: 'Failed to fetch articles' });
+    }
 })
 
-router.post('/', (req, res) => {
-    const { title, author, content } = req.body;
+router.post('/', async (req, res) => {
+    const { title, tags, content } = req.body;
 
     if (!title || !content) {
         return res.status(400).json({ error: 'Title, and content are required.' });
@@ -25,20 +31,23 @@ router.post('/', (req, res) => {
 
     const publishTime = new Date().toISOString();
 
-    const insert = db.prepare(`
-        INSERT INTO articles (title, publishTime, author, content) 
-        VALUES (?, ?, ?, ?)`
-    );
+    const tagString = Array.isArray(tags) ? tags.join(',') : tags;
 
-    const result = insert.run(title, publishTime, author, content);
+    try {
+        const articles = await prisma.articles.create({
+            data: {
+                title,
+                tags: tagString,
+                content,
+                publishTime: new Date().toISOString()
+            }
+        });
 
-    res.status(201).json({
-        id: result.lastInsertRowid,
-        title,
-        publishTime,
-        author,
-        content
-    });
+        res.status(201).json(articles)
+    } catch (error){
+        console.error(error);
+        res.status(500).json({ error: 'Failed to create article.' });
+    }
 });
 
 

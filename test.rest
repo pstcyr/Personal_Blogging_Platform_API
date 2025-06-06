@@ -9,8 +9,7 @@ POST http://localhost:5003/articles
 Content-Type: application/json
 
 {
-  "title": "How to Use Express Routers",
-  "tags": "nodejs,express,routing",
-  "author": "Patrick",
-  "content": "In this article, we explore how to modularize Express apps using routers..."
+  "title": "LFG",
+  "tags": "beam,light,bright",
+  "content": "I Love JS"
 }
