@@ -1,2 +1,16 @@
 ### TEST GET / WEBSITE
 GET http://localhost:5003
+
+### TEST GET / ARTICLES
+GET http://localhost:5003/articles
+
+### TEST GET / ARTICLES/1
+POST http://localhost:5003/articles
+Content-Type: application/json
+
+{
+  "title": "How to Use Express Routers",
+  "tags": "nodejs,express,routing",
+  "author": "Patrick",
+  "content": "In this article, we explore how to modularize Express apps using routers..."
+}
