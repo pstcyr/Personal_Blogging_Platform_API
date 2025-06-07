@@ -51,4 +51,55 @@ router.post('/', async (req, res) => {
 });
 
 
+router.put('/:id', async (req, res) =>{
+    const {id} = req.params // get id from URL path
+    const { title, tags, content } = req.body;
+
+    // convert tags array to comma-seperated string
+    const tagString = Array.isArray(tags) ? tags.join(',') : tags;
+
+    try { 
+        const updatedArticle = await prisma.articles.update({
+            where: {id: Number(id) },
+            data: {
+                title,
+                tags: tagString,
+                content
+            }
+
+        })
+
+        res.json(updatedArticle)
+
+    } catch (error) {
+        console.error('Error updating article:', error)
+
+        if (error.code === 'P2025') {
+            res.status(404).json({error: 'Article not found'});
+        } else {
+            res.status(500).json({error: 'Failed to update article'})
+        }
+
+    }
+
+
+    
+})
+
+router.delete('/:id', async (req,res) => {
+    const {id} = req.params 
+
+    try {
+        const deleteArticle = await prisma.articles.delete({
+            where: {id: Number(id)}
+        })
+
+        res.json(deleteArticle)
+
+    } catch (error) {
+        console.error('Error updating article:', error)
+    }
+
+})
+
 export default router;
